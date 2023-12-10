@@ -51,7 +51,7 @@ jobs:
         uses: sonarsource/sonarcloud-github-action@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_TOKEN: cc2e48c9a4d00e327277784f22ec5ae50c0ffe0f
 
       - name: Revisar archivos 
         run: tree
