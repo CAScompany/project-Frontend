@@ -19,7 +19,6 @@
 #       CI_ENV: develop
 #       CONTENTFUL_ENVIRONMENT: 'develop'
 #     secrets:
-#       WEBSITE_SITE_URL: ${{ secrets.WEBSITE_SITE_URL_DEV }}
 #       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_DEV }}
 #       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_DEV }}
 #       AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN}}
