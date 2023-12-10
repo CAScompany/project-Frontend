@@ -43,20 +43,19 @@ jobs:
           
       # - name: Run Linters
       #   run: npm run linters-ci
-      - name: Revisar directorio
-        run: tree
     
       - name: Install dependencies
         run: npm install
 
-      - name: Build NextJS static site
+      - name: Build app
         run: ./.github/scripts/build.sh
         shell: bash
         env:
           CI_ENV: ${{ inputs.CI_ENV }}
           CONTENTFUL_ENVIRONMENT: ${{ inputs.CONTENTFUL_ENVIRONMENT }}
           S3_ORIGIN_BUCKET: ${{ secrets.S3_ORIGIN_BUCKET }}
-
+      - name: Revisar directorio
+        run: tree
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
