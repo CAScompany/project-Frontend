@@ -50,27 +50,29 @@ jobs:
           
       # - name: Run Linters
       #   run: npm run linters-ci
-      - name: Install dependencies
-        run: npm install
+      - name: Revisar directorio
+        run: tree
+      # - name: Install dependencies
+      #   run: npm install
 
-      - name: Build NextJS static site
-        run: ./.github/scripts/build.sh
-        shell: bash
-        env:
-          CI_ENV: ${{ inputs.CI_ENV }}
-          CONTENTFUL_ENVIRONMENT: ${{ inputs.CONTENTFUL_ENVIRONMENT }}
-          S3_ORIGIN_BUCKET: ${{ secrets.S3_ORIGIN_BUCKET }}
+      # - name: Build NextJS static site
+      #   run: ./.github/scripts/build.sh
+      #   shell: bash
+      #   env:
+      #     CI_ENV: ${{ inputs.CI_ENV }}
+      #     CONTENTFUL_ENVIRONMENT: ${{ inputs.CONTENTFUL_ENVIRONMENT }}
+      #     S3_ORIGIN_BUCKET: ${{ secrets.S3_ORIGIN_BUCKET }}
 
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{secrets.AWS_ACCESS_KEY_ID}}
-          aws-secret-access-key: ${{secrets.AWS_SECRET_ACCESS_KEY}}
-          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
-          aws-region: ${{secrets.AWS_DEFAULT_REGION}}
+      # - name: Configure AWS Credentials
+      #   uses: aws-actions/configure-aws-credentials@v1
+      #   with:
+      #     aws-access-key-id: ${{secrets.AWS_ACCESS_KEY_ID}}
+      #     aws-secret-access-key: ${{secrets.AWS_SECRET_ACCESS_KEY}}
+      #     aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
+      #     aws-region: ${{secrets.AWS_DEFAULT_REGION}}
 
-      - name: S3 Deploy
-        run: ./.github/scripts/deploy.sh
-        shell: bash
-        env:
-          S3_ORIGIN_BUCKET: ${{ secrets.S3_ORIGIN_BUCKET }}
+      # - name: S3 Deploy
+      #   run: ./.github/scripts/deploy.sh
+      #   shell: bash
+      #   env:
+      #     S3_ORIGIN_BUCKET: ${{ secrets.S3_ORIGIN_BUCKET }}
