@@ -47,14 +47,20 @@ jobs:
           CONTENTFUL_ENVIRONMENT: ${{ inputs.CONTENTFUL_ENVIRONMENT }}
           S3_ORIGIN_BUCKET: ${{ secrets.S3_ORIGIN_BUCKET }}
 
-      - name: SonarCloud Scan
-        uses: sonarsource/sonarcloud-github-action@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: cc2e48c9a4d00e327277784f22ec5ae50c0ffe0f
+      - name: Setup SonarQube
+        uses: warchant/setup-sonar-scanner@v7
+
+    # Run sonar-scanner
+      - name: SonarQube Scan
+        run: sonar-scanner -X
+              -Dsonar.host.url=https://sonarcloud.io
+              -Dsonar.token=cc2e48c9a4d00e327277784f22ec5ae50c0ffe0f
+              -Dsonar.organization=cascompany
+              -Dsonar.projectKey=CAScompany_project-Frontend
+              -Dsonar.sources=.
 
       - name: Revisar archivos 
-        run: tree
+        run: tree & ls -lath
 
       
       # - name: SonarQube Quality Gate check
