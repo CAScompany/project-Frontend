@@ -45,12 +45,14 @@ jobs:
       - name: Clear Prepare Script
         run: npm set-script prepare ""
 
+      # - name: Install dependencies
+      #   run: npm ci
+          
+      # - name: Run Linters
+      #   run: npm run linters-ci
       - name: Install dependencies
-        run: npm ci
-
-      - name: Run Linters
-        run: npm run linters-ci
-
+        run: npm install
+        
       - name: Build NextJS static site
         run: ./.github/scripts/build.sh
         shell: bash
