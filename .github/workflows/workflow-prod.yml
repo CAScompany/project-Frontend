@@ -15,7 +15,7 @@ concurrency:
 
 jobs:
   build-dev:
-    uses: ./deploy-to-s3.yml@main
+    uses: deploy-to-s3.yml@main
     with:
       CI_ENV: prod
       CONTENTFUL_ENVIRONMENT: 'production'
