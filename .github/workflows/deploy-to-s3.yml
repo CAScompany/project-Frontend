@@ -27,9 +27,9 @@ jobs:
     defaults:
       run:
           working-directory: ./react
-    strategy:
-      matrix:
-        node-version: [16.x]
+    # strategy:
+    #   matrix:
+    #     node-version: [16.x]
 
     steps:
       - name: Code checkout 
