@@ -32,18 +32,15 @@ jobs:
         node-version: [16.x]
 
     steps:
-      - uses: actions/checkout@v2
+      - name: Code checkout 
+        uses: actions/checkout@v4
         with:
           fetch-depth: 5
 
-      - name: Setup Node
-        uses: actions/setup-node@v2
+      - name: Instalar Node.js y npm
+        uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'npm'
-
-      - name: Update NPM
-        run: npm install -g npm@8
+          node-version: '20'
 
       - name: Clear Prepare Script
         run: npm set-script prepare ""
