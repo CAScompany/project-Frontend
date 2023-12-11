@@ -14,7 +14,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build-dev:
+  build-prod:
     uses: CAScompany/project-Frontend/.github/workflows/deploy-to-s3.yml@main
     with:
       CI_ENV: prod
