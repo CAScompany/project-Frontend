@@ -1,7 +1,7 @@
 name: Github Action Workflow STAGE
 on:
   push:
-    branches: [ "test" ]
+    branches: test
   repository_dispatch:
     types:
       - build-staging
@@ -13,7 +13,7 @@ concurrency:
 
 jobs:
   build-staging:
-    uses: CAScompany/project-Frontend/.github/workflows/deploy-to-s3.yml@main
+    uses: CAScompany/project-Frontend/.github/workflows/deploy-to-s3.yml@test
     with:
       CI_ENV: test
       CONTENTFUL_ENVIRONMENT: 'test'
