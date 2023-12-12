@@ -14,7 +14,7 @@ concurrency:
 
 jobs:
   build-staging:
-    uses: CAScompany/project-Frontend/.github/workflows/deploy-to-s3.yml@test
+    uses: CAScompany/project-Frontend/.github/workflows/deploy-to-s3.yml@main
     with:
       CI_ENV: test
       CONTENTFUL_ENVIRONMENT: 'test'
