@@ -104,7 +104,7 @@ jobs:
       #   env:
       #     S3_ORIGIN_BUCKET: ${{ secrets.S3_ORIGIN_BUCKET }}
       - name: Obtener bucket según la rama
-        run: export S3_ORIGIN_BUCKET=${{ secrets.S3_ORIGIN_BUCKET_PROD }}
+        run: echo "S3_ORIGIN_BUCKET=${{ secrets.S3_ORIGIN_BUCKET_PROD }}" >> $GITHUB_ENV
 
       # - name: Obtener bucket según la rama
       #   run: |
