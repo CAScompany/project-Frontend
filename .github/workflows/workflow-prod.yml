@@ -1,9 +1,9 @@
 name: Github Action Workflow PROD
 
 on:
-  push:
-    branches:
-      - main
+  # push:
+  #   branches:
+  #     - main
   repository_dispatch:
     types:
       - build-prod
