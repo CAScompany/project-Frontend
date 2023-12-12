@@ -116,7 +116,6 @@ jobs:
       #         export S3_ORIGIN_BUCKET=${{ secrets.S3_ORIGIN_BUCKET_TEST }}
       #       fi
       - name: S3 Deploy
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: ./.github/scripts/deploy.sh
         shell: bash
         env:
