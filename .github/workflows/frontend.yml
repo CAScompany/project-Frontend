@@ -116,17 +116,9 @@ jobs:
       #         export S3_ORIGIN_BUCKET=${{ secrets.S3_ORIGIN_BUCKET_TEST }}
       #       fi
       - name: S3 Deploy
-        run: |
-              if [[ ${{ github.ref }} == "refs/heads/main" ]]; then
-                export S3_ORIGIN_BUCKET=${{ secrets.S3_ORIGIN_BUCKET_PROD }}
-              elif [[ ${{ github.ref }} == "refs/heads/dev" ]]; then
-                export S3_ORIGIN_BUCKET=${{ secrets.S3_ORIGIN_BUCKET_DEV }}
-              else
-                export S3_ORIGIN_BUCKET=${{ secrets.S3_ORIGIN_BUCKET_TEST }}
-              fi
-              export S3_ORIGIN_BUCKET=${{ secrets.S3_ORIGIN_BUCKET_PROD }}
-              ./.github/scripts/deploy.sh
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: ./.github/scripts/deploy.sh
         shell: bash
         env:
-          S3_ORIGIN_BUCKET: ${{ env.S3_ORIGIN_BUCKET }}
+          S3_ORIGIN_BUCKET: ${{ secrets.S3_ORIGIN_BUCKET_PROD }}
         
