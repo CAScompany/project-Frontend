@@ -112,9 +112,7 @@ jobs:
             else
               export S3_ORIGIN_BUCKET="${{ secrets.S3_ORIGIN_BUCKET_TEST }}"
             fi
+            echo "S3_ORIGIN_BUCKET=$S3_ORIGIN_BUCKET" >> $GITHUB_ENV
       - name: S3 Deploy
         run: ./.github/scripts/deploy.sh
         shell: bash
-        env:
-          S3_ORIGIN_BUCKET: ${{ env.S3_ORIGIN_BUCKET }}
-        
