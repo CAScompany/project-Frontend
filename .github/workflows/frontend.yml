@@ -85,7 +85,7 @@ jobs:
         run: npm install
 
       - name: Build app
-        run: ./.github/scripts/build.sh
+        run: rm -rf ./out && npm run build
         shell: bash
 
       - name: Revisar directorio
@@ -117,19 +117,19 @@ jobs:
       #       fi
       - name: S3 Deploy
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        run: ./.github/scripts/deploy.sh
+        run: aws s3 sync dist/ s3://$S3_ORIGIN_BUCKET
         shell: bash
         env:
           S3_ORIGIN_BUCKET: ${{ secrets.S3_ORIGIN_BUCKET_PROD }}
       - name: S3 Deploy_test
         if: github.ref == 'refs/heads/test' && github.event_name == 'push'
-        run: ./.github/scripts/deploy.sh
+        run: aws s3 sync dist/ s3://$S3_ORIGIN_BUCKET
         shell: bash
         env:
           S3_ORIGIN_BUCKET: ${{ secrets.S3_ORIGIN_BUCKET_TEST }}
       - name: S3 Deploy_dev
         if: github.ref == 'refs/heads/dev' && github.event_name == 'push'
-        run: ./.github/scripts/deploy.sh
+        run: aws s3 sync dist/ s3://$S3_ORIGIN_BUCKET
         shell: bash
         env:
           S3_ORIGIN_BUCKET: ${{ secrets.S3_ORIGIN_BUCKET_DEV }}  
