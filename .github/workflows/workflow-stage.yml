@@ -14,9 +14,9 @@ concurrency:
 
 jobs:
   build-staging:
-    uses: CAScompany/project-Frontend/.github/workflows/deploy-to-s3.yml@main
+    uses: CAScompany/project-Frontend/.github/workflows/deploy-to-s3.yml@test
     with:
-      CI_ENV: staging
+      CI_ENV: test
       CONTENTFUL_ENVIRONMENT: 'test'
     secrets:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID}}
