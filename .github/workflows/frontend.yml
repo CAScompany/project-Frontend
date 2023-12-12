@@ -20,54 +20,7 @@ on:
 
 jobs:
 
-  # Testing:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Code checkout 
-  #       uses: actions/checkout@v4
-  #       with:
-  #         fetch-depth: 5
-
-  #     - name: Instalar Node.js y npm
-  #       uses: actions/setup-node@v4
-  #       with:
-  #         node-version: '20'
-
-  #     - name: Install dependencies
-  #       run: npm install
-
-  #     - name: Build app
-  #       run: ./.github/scripts/build.sh
-  #       shell: bash
-  #       env:
-  #         CI_ENV: ${{ inputs.CI_ENV }}
-  #         CONTENTFUL_ENVIRONMENT: ${{ inputs.CONTENTFUL_ENVIRONMENT }}
-  #         S3_ORIGIN_BUCKET: ${{ secrets.S3_ORIGIN_BUCKET }}
-
-  #     - name: Setup SonarQube
-  #       uses: warchant/setup-sonar-scanner@v7
-
-  #   Run sonar-scanner test
-  #     - name: SonarQube Scan
-  #       run: sonar-scanner -X
-  #             -Dproject.settings=sonar-project.properties
-  #       env:
-  #         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-  #     - name: Revisar archivos 
-  #       run: tree & ls -lath
-
-      
-  #     - name: SonarQube Quality Gate check
-  #       id: sonarqube-quality-gate-check
-  #       uses: sonarsource/sonarqube-quality-gate-action@master
-  #       timeout-minutes: 5
-  #       env:
-  #         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-
-
-
-  Build_and_Deploy:
-#    needs:  Testing
+  Testing:
     runs-on: ubuntu-latest
     steps:
       - name: Code checkout 
@@ -85,11 +38,55 @@ jobs:
         run: npm install
 
       - name: Build app
-        run: ./.github/scripts/build.sh
+        run: rm -rf ./out && npm run build
+        shell: bash
+
+      - name: Setup SonarQube
+        uses: warchant/setup-sonar-scanner@v7
+
+#    Run sonar-scanner test
+      - name: SonarQube Scan
+        run: sonar-scanner -X
+              -Dproject.settings=sonar-project.properties
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      - name: Revisar archivos 
+        run: tree & ls -lath
+
+      
+      - name: SonarQube Quality Gate check
+        id: sonarqube-quality-gate-check
+        uses: sonarsource/sonarqube-quality-gate-action@master
+        timeout-minutes: 5
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+
+
+  Build_and_Deploy:
+    needs:  Testing
+    runs-on: ubuntu-latest
+    steps:
+      - name: Code checkout 
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+          fetch-depth: 5
+
+      - name: Instalar Node.js y npm
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build app
+        run: rm -rf ./out && npm run build
         shell: bash
 
       - name: Revisar directorio
-        run: tree
+        run: ls -lath
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -98,38 +95,21 @@ jobs:
           aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
           aws-region: ${{secrets.AWS_DEFAULT_REGION}}
 
-      # - name: S3 Deploy
-      #   run: ./.github/scripts/deploy.sh
-      #   shell: bash
-      #   env:
-      #     S3_ORIGIN_BUCKET: ${{ secrets.S3_ORIGIN_BUCKET }}
-      # - name: Obtener bucket según la rama
-      #   run: export S3_ORIGIN_BUCKET=${{ secrets.S3_ORIGIN_BUCKET_PROD }}
-
-      # - name: Obtener bucket según la rama
-      #   run: |
-      #       if [[ ${{ github.ref }} == "refs/heads/main" ]]; then
-      #         export S3_ORIGIN_BUCKET=${{ secrets.S3_ORIGIN_BUCKET_PROD }}
-      #       elif [[ ${{ github.ref }} == "refs/heads/dev" ]]; then
-      #         export S3_ORIGIN_BUCKET=${{ secrets.S3_ORIGIN_BUCKET_DEV }}
-      #       else
-      #         export S3_ORIGIN_BUCKET=${{ secrets.S3_ORIGIN_BUCKET_TEST }}
-      #       fi
       - name: S3 Deploy
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        run: ./.github/scripts/deploy.sh
+        run: aws s3 sync dist/ s3://$S3_ORIGIN_BUCKET
         shell: bash
         env:
           S3_ORIGIN_BUCKET: ${{ secrets.S3_ORIGIN_BUCKET_PROD }}
       - name: S3 Deploy_test
         if: github.ref == 'refs/heads/test' && github.event_name == 'push'
-        run: ./.github/scripts/deploy.sh
+        run: aws s3 sync dist/ s3://$S3_ORIGIN_BUCKET
         shell: bash
         env:
           S3_ORIGIN_BUCKET: ${{ secrets.S3_ORIGIN_BUCKET_TEST }}
       - name: S3 Deploy_dev
         if: github.ref == 'refs/heads/dev' && github.event_name == 'push'
-        run: ./.github/scripts/deploy.sh
+        run: aws s3 sync dist/ s3://$S3_ORIGIN_BUCKET
         shell: bash
         env:
           S3_ORIGIN_BUCKET: ${{ secrets.S3_ORIGIN_BUCKET_DEV }}  
