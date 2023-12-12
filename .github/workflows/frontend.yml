@@ -73,7 +73,7 @@ jobs:
       - name: Code checkout 
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.ref }}
+          # ref: ${{ github.ref }}
           fetch-depth: 5
 
       - name: Instalar Node.js y npm
@@ -90,6 +90,7 @@ jobs:
 
       - name: Revisar directorio
         run: tree
+
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -120,4 +121,5 @@ jobs:
         shell: bash
         env:
           S3_ORIGIN_BUCKET: ${{ secrets.S3_ORIGIN_BUCKET_PROD }}
+
         
