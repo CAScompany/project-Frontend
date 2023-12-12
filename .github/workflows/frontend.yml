@@ -89,7 +89,7 @@ jobs:
         shell: bash
 
       - name: Revisar directorio
-        run: tree
+        run: ls -lath
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
