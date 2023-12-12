@@ -2,7 +2,7 @@ name: Github Action Workflow STAGE
 on:
   push:
     branches:
-      - main
+      - test
   repository_dispatch:
     types:
       - build-staging
