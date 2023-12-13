@@ -43,12 +43,8 @@ jobs:
         run: npm install
 
       - name: Build app
-        run: ./.github/scripts/build.sh
+        run: rm -rf ./out && npm run build
         shell: bash
-        env:
-          CI_ENV: ${{ inputs.CI_ENV }}
-          CONTENTFUL_ENVIRONMENT: ${{ inputs.CONTENTFUL_ENVIRONMENT }}
-          S3_ORIGIN_BUCKET: ${{ secrets.S3_ORIGIN_BUCKET }}
 
       - name: Setup SonarQube
         uses: warchant/setup-sonar-scanner@v7
