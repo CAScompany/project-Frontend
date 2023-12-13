@@ -64,7 +64,7 @@ jobs:
 
 
   Build_and_Deploy:
-#    needs:  Testing
+##    needs:  Testing
     runs-on: ubuntu-latest
     steps:
       - name: Code checkout 
