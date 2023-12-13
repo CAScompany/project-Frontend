@@ -1,12 +1,12 @@
-name: Github Action Workflow PROD
+name: Github Action Workflow DEV
 
 on:
   push:
     branches:
-      - main
+      - dev
   repository_dispatch:
     types:
-      - build-prod
+      - build-dev
   workflow_dispatch:
 
 concurrency:
@@ -14,19 +14,15 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build-prod:
-<<<<<<< HEAD
-    uses: CAScompany/project-devops/.github/workflows/deploy-to-s3.yml@main
-=======
-    uses: CAScompany/project-Frontend/.github/workflows/deploy-to-s3.yml@main
->>>>>>> main
+  build-dev:
+    uses: CAScompany/project-Frontend/.github/workflows/deploy-to-s3.yml@dev
     with:
-      CI_ENV: prod
-      CONTENTFUL_ENVIRONMENT: 'main'
+      CI_ENV: dev
+      CONTENTFUL_ENVIRONMENT: 'dev'
     secrets:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN}}
       AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
-      S3_ORIGIN_BUCKET: ${{ secrets.S3_ORIGIN_BUCKET_PROD }}
+      S3_ORIGIN_BUCKET: ${{ secrets.S3_ORIGIN_BUCKET_DEV }}
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
