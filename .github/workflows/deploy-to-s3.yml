@@ -106,4 +106,4 @@ jobs:
         run: aws s3 sync dist/ s3://$S3_ORIGIN_BUCKET
         shell: bash
         env:
-          S3_ORIGIN_BUCKET: ${{ secrets.S3_ORIGIN_BUCKET_PROD }}
+          S3_ORIGIN_BUCKET: ${{ secrets.S3_ORIGIN_BUCKET }}
