@@ -17,7 +17,7 @@ on:
       - build-frontend
   workflow_dispatch:
 
-
+##
 jobs:
 
 #   Testing:
@@ -64,7 +64,11 @@ jobs:
 
 
   Build_and_Deploy:
+<<<<<<< HEAD:.github/workflows/frontend.yml
 #    needs:  Testing
+=======
+##    needs:  Testing
+>>>>>>> main:.github/workflows/frontend
     runs-on: ubuntu-latest
     steps:
       - name: Code checkout 
