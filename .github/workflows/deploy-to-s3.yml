@@ -121,40 +121,15 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: reporte-postman-root-conf-${{ inputs.CI_ENV }}
-          path: ./root-conf/testArtifacts
+          path: ./testArtifacts
 
-      # - name: Get Artifact URL
-      #   run: echo ' ${{ steps.upload_artifact.outputs.artifact_url }}'
-
-      # - name: Send custom JSON data to Slack workflow
-      #   id: slack
-      #   uses: slackapi/slack-github-action@v1.24.0
-      #   with:
-      #     # For posting a rich message using Block Kit
-      #     payload: |
-      #       {
-
-      #         "text": "GitHub Action build result: ${{ job.status }}\n",
-      #         "blocks": [
-      #           {
-      #             "type": "section",
-      #             "text": {
-      #               "type": "mrkdwn",
-      #               "text": "Funcional Test result: ${{ job.status }}\n"
-      #             }
-      #           }
-      #         ]
-      #       }
-      #   env:
-      #     SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-      #     SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
       - name: Slack Notification
         uses: act10ns/slack@v1
         with: 
           status: ${{ job.status }}
           steps: ${{toJson(steps)}}
           channel: '#proyecto-ort'
-          message: Proyecto-Frontend ${{ github.job}} en ${{ inputs.CI_ENV }} branch fue ${{ job.status }} Informe":" ${{steps.upload_artifact.outputs.artifact_url}}
+          message: Proyecto-Frontend ${{ github.job}} en ${{ inputs.CI_ENV }} branch fue ${{ job.status }} Informe":" ${{steps.upload_artifact.outputs.artifact_url.}}
         if: always() 
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
