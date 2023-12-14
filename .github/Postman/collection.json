@@ -15,11 +15,11 @@
             "raw": ""
           },
           "url": {
-            "raw": "http://localhost/index",
+            "raw": "http://localhost:80",
             "protocol": "http",
             "host": ["localhost"],
             "port": "80",
-            "path": ["index"]
+            "path": []
           }
         },
         "response": [],
