@@ -70,17 +70,20 @@ jobs:
   FUNTIONAL_TESTING:
 #    needs:  Testing
     runs-on: ubuntu-latest
-
     steps:
       - name: Code checkout 
         uses: actions/checkout@v4
         with:
-          fetch-depth: 2
+          fetch-depth: 5
 
       - name: Instalar Node.js y npm
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+
+      - name: Install dependencies
+        run: npm install
+
       - name: Build app
         run: rm -rf ./out && npm run build
         shell: bash
@@ -116,25 +119,25 @@ jobs:
 
 
   # Build_and_Deploy:
-  #   needs:  FUNTIONAL_TESTING
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Code checkout 
-  #       uses: actions/checkout@v4
-  #       with:
-  #         fetch-depth: 5
+    # needs:  FUNTIONAL_TESTING
+    # runs-on: ubuntu-latest
+    # steps:
+    #   - name: Code checkout 
+    #     uses: actions/checkout@v4
+    #     with:
+    #       fetch-depth: 5
 
-  #     - name: Instalar Node.js y npm
-  #       uses: actions/setup-node@v4
-  #       with:
-  #         node-version: '20'
+    #   - name: Instalar Node.js y npm
+    #     uses: actions/setup-node@v4
+    #     with:
+    #       node-version: '20'
 
-  #     - name: Install dependencies
-  #       run: npm install
+    #   - name: Install dependencies
+    #     run: npm install
 
-  #     - name: Build app
-  #       run: rm -rf ./out && npm run build
-  #       shell: bash
+    #   - name: Build app
+    #     run: rm -rf ./out && npm run build
+    #     shell: bash
 
   #     - name: Configure AWS Credentials
   #       uses: aws-actions/configure-aws-credentials@v1
