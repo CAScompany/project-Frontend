@@ -95,7 +95,7 @@ jobs:
 
       - name: Copy Files to NGINX Folder
         run: |
-          sudo cp -r dist/* /var/www/html/
+          sudo cp -r dist/* /usr/share/nginx/html
 
       - name: Restart NGINX Service
         run: sudo systemctl restart nginx
