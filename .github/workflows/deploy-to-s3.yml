@@ -133,6 +133,8 @@ jobs:
           # For posting a rich message using Block Kit
           payload: |
             {
+              "key": "value",
+              "foo": "bar"
               "text": "GitHub Action build result: ${{ job.status }}\n",
               "blocks": [
                 {
