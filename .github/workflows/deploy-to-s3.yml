@@ -22,54 +22,58 @@ on:
         required: true
       SONAR_TOKEN:
         required: true        
-      
+      SLACK_WEBHOOK_URL:
+        required: true 
 
 jobs:
 
-  Testing:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Code checkout 
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 5
+#   Testing:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Code checkout 
+#         uses: actions/checkout@v4
+#         with:
+#           fetch-depth: 5
 
-      - name: Instalar Node.js y npm
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
+#       - name: Instalar Node.js y npm
+#         uses: actions/setup-node@v4
+#         with:
+#           node-version: '20'
 
-      - name: Install dependencies
-        run: npm install
+#       - name: Install dependencies
+#         run: npm install
 
-      - name: Build app
-        run: rm -rf ./out && npm run build
-        shell: bash
+#       - name: Build app
+#         run: rm -rf ./out && npm run build
+#         shell: bash
 
-      - name: Setup SonarQube
-        uses: warchant/setup-sonar-scanner@v7
+#       - name: Setup SonarQube
+#         uses: warchant/setup-sonar-scanner@v7
 
-#    Run sonar-scanner test
-      - name: SonarQube Scan
-        run: sonar-scanner -X
-              -Dproject.settings=./.github/sonar/sonar-project.properties
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+# #    Run sonar-scanner test
+#       - name: SonarQube Scan
+#         run: sonar-scanner -X
+#               -Dproject.settings=./.github/sonar/sonar-project.properties
+#         env:
+#           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
-      - name: Revisar archivos 
-        run: tree & ls -lath
+#       - name: Revisar archivos 
+#         run: tree & ls -lath
 
       
-      - name: SonarQube Quality Gate check
-        id: sonarqube-quality-gate-check
-        uses: sonarsource/sonarqube-quality-gate-action@master
-        timeout-minutes: 5
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+#       - name: SonarQube Quality Gate check
+#         id: sonarqube-quality-gate-check
+#         uses: sonarsource/sonarqube-quality-gate-action@master
+#         timeout-minutes: 5
+#         env:
+#           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      
 
   FUNTIONAL_TESTING:
-    needs:  Testing
+#    needs:  Testing
     runs-on: ubuntu-latest
+    # env: 
+    #   SLACK_WEBHOOK_URL: ${{secrets.SLACK_WEBHOOK_URL}}
     steps:
       - name: Code checkout 
         uses: actions/checkout@v4
@@ -113,43 +117,68 @@ jobs:
         run: tree
                     
       - name: Almacenar reporte como artefacto
+        id: upload_artifact
         uses: actions/upload-artifact@v3
         with:
           name: reporte-postman-root-conf-${{ inputs.CI_ENV }}
           path: ./root-conf/testArtifacts
 
+      - name: Get Artifact URL
+        run: echo ' ${{ steps.upload_artifact.outputs.artifact_url }}'
 
-  Build_and_Deploy:
-    needs:  FUNTIONAL_TESTING
-    runs-on: ubuntu-latest
-    steps:
-      - name: Code checkout 
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 5
+      # - name: Send custom JSON data to Slack workflow
+      #   id: slack
+      #   uses: slackapi/slack-github-action@v1.24.0
+      #   with:
+      #     # For posting a rich message using Block Kit
+      #     payload: |
+      #       {
+      #         "text": "GitHub Action build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}",
+      #         "blocks": [
+      #           {
+      #             "type": "section",
+      #             "text": {
+      #               "type": "mrkdwn",
+      #               "text": "GitHub Action build result: ${{ job.status }}\n${{ github. || github.event.head_commit.url }}"
+      #             }
+      #           }
+      #         ]
+      #       }
+      #   env:
+      #     SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      #     SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
 
-      - name: Instalar Node.js y npm
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
+  # Build_and_Deploy:
+  #   needs:  FUNTIONAL_TESTING
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Code checkout 
+  #       uses: actions/checkout@v4
+  #       with:
+  #         fetch-depth: 5
 
-      - name: Install dependencies
-        run: npm install
+  #     - name: Instalar Node.js y npm
+  #       uses: actions/setup-node@v4
+  #       with:
+  #         node-version: '20'
 
-      - name: Build app
-        run: rm -rf ./out && npm run build
-        shell: bash
+  #     - name: Install dependencies
+  #       run: npm install
 
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{secrets.AWS_ACCESS_KEY_ID}}
-          aws-secret-access-key: ${{secrets.AWS_SECRET_ACCESS_KEY}}
-          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
-          aws-region: ${{secrets.AWS_DEFAULT_REGION}}
+  #     - name: Build app
+  #       run: rm -rf ./out && npm run build
+  #       shell: bash
 
-      - name: S3 Deploy
-        run: aws s3 sync dist/ s3://$S3_ORIGIN_BUCKET
-        shell: bash
-        env:
-          S3_ORIGIN_BUCKET: ${{ secrets.S3_ORIGIN_BUCKET }}
+  #     - name: Configure AWS Credentials
+  #       uses: aws-actions/configure-aws-credentials@v1
+  #       with:
+  #         aws-access-key-id: ${{secrets.AWS_ACCESS_KEY_ID}}
+  #         aws-secret-access-key: ${{secrets.AWS_SECRET_ACCESS_KEY}}
+  #         aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
+  #         aws-region: ${{secrets.AWS_DEFAULT_REGION}}
+
+  #     - name: S3 Deploy
+  #       run: aws s3 sync dist/ s3://$S3_ORIGIN_BUCKET
+  #       shell: bash
+  #       env:
+  #         S3_ORIGIN_BUCKET: ${{ secrets.S3_ORIGIN_BUCKET }}
