@@ -67,6 +67,57 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
+  FUNTIONAL_TESTING:
+    needs:  Testing
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ env.CODE_DIR }}
+    steps:
+      - name: Code checkout 
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: test maven
+        run: mvn clean test install
+      
+      - name: Instalar Node.js y npm
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Build app
+        run: rm -rf ./out && npm run build
+        shell: bash
+
+      - name: Install NGINX
+        run: |
+          sudo apt-get update
+          sudo apt-get install nginx -y
+
+      - name: Copy Files to NGINX Folder
+        run: |
+          sudo cp -r dist/* /var/www/html/
+
+      - name: Restart NGINX Service
+        run: sudo systemctl restart nginx
+
+      - name: Instalar Newman
+        run: |
+              npm install -g newman@latest
+              npm install -g newman-reporter-htmlextra
+
+      - name: Ejecutar pruebas funcionales con Newman
+        run: |
+              newman run ./.github/Postman/collection.json -r cli,htmlextra --reporter-htmlextra-export testArtifacts/htmlreport.html
+      - name: Revisar archivos 
+        run: tree
+                    
+      - name: Almacenar reporte como artefacto
+        uses: actions/upload-artifact@v3
+        with:
+          name: reporte-postman-root-conf-${{ inputs.CI_ENV }}
+          path: ./root-conf/testArtifacts
 
 
   Build_and_Deploy:
