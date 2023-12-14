@@ -24,3 +24,4 @@ jobs:
       AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
       S3_ORIGIN_BUCKET: ${{ secrets.S3_ORIGIN_BUCKET_TEST }}
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      SLACK_WEBHOOK_URL: ${{secrets.SLACK_WEBHOOK_URL}}      
