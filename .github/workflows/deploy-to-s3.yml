@@ -154,7 +154,7 @@ jobs:
           status: ${{ job.status }}
           steps: ${{toJson(steps)}}
           channel: '#proyecto-ort'
-          message: Proyecto-Frontend ${{ github.job}} en ${{ inputs.CI_ENV }} branch fue ${{ job.status }} ${{steps.upload_artifact.conclusion}} nsn ${{steps.upload_artifact.outcome}} nsn ${{steps.upload_artifact.outputs}}
+          message: Proyecto-Frontend ${{ github.job}} en ${{ inputs.CI_ENV }} branch fue ${{ job.status }} Informe":" ${{steps.upload_artifact.outputs.artifact_url}}
         if: always() 
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
