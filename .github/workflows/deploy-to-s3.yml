@@ -154,7 +154,7 @@ jobs:
           status: ${{ job.status }}
           steps: ${{toJson(steps)}}
           channel: '#proyecto-ort'
-          message: Proyecto-Frontend Funcional test en ${{ inputs.CI_ENV }} branch fue ${{ job.status }}
+          message: Proyecto-Frontend ${{ github.job.name }} en ${{ inputs.CI_ENV }} branch fue ${{ job.status }}
         if: always() 
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
